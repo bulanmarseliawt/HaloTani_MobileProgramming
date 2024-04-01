@@ -19,7 +19,7 @@ class MediaHomePage extends StatelessWidget {
               height: 200, 
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage('assets/img/mediatanam.jpg'),
+                  image: AssetImage('assets/img/mediatanamreal.jpg'),
                   fit: BoxFit.cover,
                 ),
               ),

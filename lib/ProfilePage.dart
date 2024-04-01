@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:halotani/HomePage.dart';
 import 'package:halotani/HistoryPage.dart';
+import 'package:halotani/UpdateProfilePage.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -51,7 +52,12 @@ class ProfilePage extends StatelessWidget {
             SizedBox(
               width: 200,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => UpdateProfileScreen()),
+                    );
+                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: ( const Color.fromARGB(255, 4, 82, 44)),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
@@ -69,7 +75,7 @@ class ProfilePage extends StatelessWidget {
             ),
             ListTile(
               leading: Icon(Icons.credit_card),
-              title: Text('Detail Pemesanan'),
+              title: Text('Riwayat Pemesanan'),
               onTap: () {},
             ),
             ListTile(

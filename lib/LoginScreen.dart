@@ -1,4 +1,6 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:halotani/ProfilePage.dart';
 import 'package:halotani/SignupScreen.dart';
 
@@ -15,7 +17,7 @@ class LoginScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              _header(context),
+              _header(),
               _inputField(context),
               _forgotPassword(context),
               _signup(context),
@@ -26,13 +28,10 @@ class LoginScreen extends StatelessWidget {
     );
   }
 
-  Widget _header(context) {
-    return const Column(
+  Widget _header() {
+    return Column(
       children: [
-        Text(
-          "Selamat Datang Kembali",
-          style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
-        ),
+        Image.asset('assets/img/HaloTani.png', width: 200, height: 200,),
         Text("Masukkan kredensial Anda untuk masuk"),
       ],
     );
@@ -49,7 +48,7 @@ class LoginScreen extends StatelessWidget {
               borderRadius: BorderRadius.circular(18),
               borderSide: BorderSide.none,
             ),
-            fillColor: const Color(0xFFaadfc0).withOpacity(0.1),
+            fillColor: Color.fromRGBO(170, 223, 192, 1).withOpacity(0.1),
             filled: true,
             prefixIcon: const Icon(Icons.person),
           ),
@@ -73,9 +72,9 @@ class LoginScreen extends StatelessWidget {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) =>ProfilePage()),
+              MaterialPageRoute(builder: (context) => ProfilePage()),
               );
-          },
+           },
           style: ElevatedButton.styleFrom(
             shape: const StadiumBorder(),
             padding: const EdgeInsets.symmetric(vertical: 16),
@@ -89,6 +88,32 @@ class LoginScreen extends StatelessWidget {
       ],
     );
   }
+
+  // void _login(BuildContext context) async {
+  //   // Ganti URL dengan endpoint login Anda
+  //   final url = Uri.parse('https://jsonplaceholder.typicode.com/albumlogin/1');
+  //   final response = await http.post(
+  //     url,
+  //     body: json.encode({
+  //       'username': 'test',
+  //       'password': 'test',
+  //     }),
+  //     headers: {'Content-Type': 'application/json'},
+  //   );
+
+  //   if (response.statusCode == 200) {
+  //     // Jika login berhasil, navigasikan ke halaman profil
+  //     Navigator.push(
+  //       context,
+  //       MaterialPageRoute(builder: (context) => ProfilePage()),
+  //     );
+  //   } else {
+  //     // Jika login gagal, tampilkan pesan kesalahan
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       SnackBar(content: Text('Login gagal')),
+  //     );
+  //   }
+  // }
 
   Widget _forgotPassword(context) {
     return TextButton(
@@ -108,9 +133,9 @@ class LoginScreen extends StatelessWidget {
         TextButton(
           onPressed: () {
             Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => SignupScreen()),
-                );
+              context,
+              MaterialPageRoute(builder: (context) => SignupScreen()),
+            );
           },
           child: const Text(
             "Daftar",

@@ -3,7 +3,7 @@ import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:get/get.dart';
 
 const tProfile = 'Edit Profile';
-const tProfileImage = 'assets/profile_image.jpg';
+const tProfileImage = 'assets/img/profile.jpg';
 const tPrimaryColor = Color.fromRGBO(170, 223, 192, 1);
 const tDefaultSize = 16.0;
 const tEditProfile = 'Edit Profile';
@@ -13,7 +13,7 @@ const tPhoneNo = 'Phone No';
 const tPassword = 'Password';
 const tFormHeight = 20.0;
 const tJoined = 'Joined ';
-const tJoinedAt = 'June 2022';
+const tJoinedAt = 'March 2024';
 const tDelete = 'Delete';
 
 class ProfileController extends GetxController {}

@@ -2,9 +2,51 @@ import 'package:flutter/material.dart';
 import 'package:halotani/HistoryPage.dart';
 import 'package:halotani/MediaHomePage.dart';
 import 'package:halotani/ProfilePage.dart';
+import 'package:halotani/PupukHomePage.dart';
 import 'package:halotani/RoomChatPage.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
+class PakarTanaman {
+  final String foto;
+  final String nama;
+  final String jenis;
+  final int harga;
+
+  PakarTanaman({
+    required this.foto,
+    required this.nama,
+    required this.jenis,
+    required this.harga,
+  });
+
+  factory PakarTanaman.fromMap(Map<String, dynamic> json) {
+    return PakarTanaman(
+      foto: json['foto'],
+      nama: json['nama'],
+      jenis: json['jenis'],
+      harga: json['harga'],
+    );
+  }
+}
 
 class HomePage extends StatelessWidget {
+  final List<PakarTanaman> pakarList = [
+    PakarTanaman(
+      foto: 'assets/img/pakar1.png',
+      nama: 'Ahmad, S.P.',
+      jenis: 'Buah-buahan',
+      harga: 0,
+    ),
+    PakarTanaman(
+      foto: 'assets/img/pakar2.png',
+      nama: 'Prof. Dr. Ir. Budioni, M.Sc. ',
+      jenis: 'Sayuran',
+      harga: 0,
+    ),
+    // Tambahkan data pakar tanaman lainnya sesuai kebutuhan
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,17 +61,33 @@ class HomePage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Container(
-              height: 200, 
+              height: 200,
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage('assets/img/petani.jpg'),
+                  image: AssetImage('assets/img/petani.webp'),
                   fit: BoxFit.cover,
                 ),
               ),
             ),
             SizedBox(height: 20),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.0),
+              child: TextField(
+                decoration: InputDecoration(
+                  hintText: 'Cari...',
+                  prefixIcon: Icon(Icons.search),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                ),
+                onChanged: (value) {
+                  // Logika untuk mengubah teks pencarian
+                },
+              ),
+            ),
+            SizedBox(height: 20),
             GridView.count(
-              crossAxisCount: 2,
+              crossAxisCount: 3,
               crossAxisSpacing: 16.0,
               mainAxisSpacing: 16.0,
               padding: EdgeInsets.all(16.0),
@@ -42,7 +100,6 @@ class HomePage extends StatelessWidget {
                   onTap: () {
                     Navigator.push(
                       context,
-                      // MaterialPageRoute(builder: (context) => TanamanPanganPage()),
                       MaterialPageRoute(builder: (context) => RoomChatPage()),
                     );
                   },
@@ -53,7 +110,6 @@ class HomePage extends StatelessWidget {
                   onTap: () {
                     Navigator.push(
                       context,
-                      // MaterialPageRoute(builder: (context) => HoltikulturaPage()),
                       MaterialPageRoute(builder: (context) => RoomChatPage()),
                     );
                   },
@@ -64,7 +120,6 @@ class HomePage extends StatelessWidget {
                   onTap: () {
                     Navigator.push(
                       context,
-                      // MaterialPageRoute(builder: (context) => HamaPage()),
                       MaterialPageRoute(builder: (context) => RoomChatPage()),
                     );
                   },
@@ -75,8 +130,7 @@ class HomePage extends StatelessWidget {
                   onTap: () {
                     Navigator.push(
                       context,
-                      // MaterialPageRoute(builder: (context) => PupukPage()),
-                      MaterialPageRoute(builder: (context) => RoomChatPage()),
+                      MaterialPageRoute(builder: (context) => PupukHomePage()),
                     );
                   },
                 ),
@@ -96,18 +150,60 @@ class HomePage extends StatelessWidget {
                   onTap: () {
                     Navigator.push(
                       context,
-                      // MaterialPageRoute(builder: (context) => AgroklimatologiPage()),
                       MaterialPageRoute(builder: (context) => RoomChatPage()),
                     );
                   },
                 ),
               ],
             ),
+            SizedBox(height: 20),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.0),
+              child: Text(
+                'Chat Langsung dengan Pakar Tanaman Andalanmu',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15.0,
+                ),
+              ),
+            ),
+            SizedBox(height: 8),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: pakarList.map((pakar) {
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      children: [
+                        CircleAvatar(
+                          radius: 50,
+                          backgroundImage: AssetImage(pakar.foto),
+                        ),
+                        SizedBox(height: 8),
+                        Text(pakar.nama),
+                        Text(pakar.jenis),
+                        Text('Harga Chat: Gratis'),
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => RoomChatPage()),
+                            );
+                          },
+                          child: Text('Chat'),
+                        ),
+                      ],
+                    ),
+                  );
+                }).toList(),
+              ),
+            ),
           ],
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 1,
+        currentIndex: 0,
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
@@ -145,6 +241,12 @@ class HomePage extends StatelessWidget {
           }
         },
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          _showConsultationDialog(context);
+        },
+        child: Icon(Icons.chat),
+      ),
     );
   }
 
@@ -160,7 +262,7 @@ class HomePage extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           color: Color(0xFFaadfc0).withOpacity(0.1),
-          borderRadius: BorderRadius.circular(15.0),
+          borderRadius: BorderRadius.circular(50.0),
           border: Border.all(color: Color(0xFF447D5C), width: 2.0),
         ),
         padding: EdgeInsets.all(16.0),
@@ -172,11 +274,11 @@ class HomePage extends StatelessWidget {
               flex: 2,
               child: Image(
                 image: image,
-                width: 60,
-                height: 60,
+                width: 40,
+                height: 40,
               ),
             ),
-            SizedBox(height: 8.0),
+            SizedBox(height: 6.0),
             Expanded(
               flex: 1,
               child: Text(
@@ -190,127 +292,70 @@ class HomePage extends StatelessWidget {
       ),
     );
   }
+
+  Future<void> _showConsultationDialog(BuildContext context) async {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Konsultasi'),
+          content: Text('Apakah Anda ingin konsultasi hari ini?'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                // Navigasi ke RoomChatPage jika pengguna ingin konsultasi hari ini
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => RoomChatPage()),
+                );
+              },
+              child: Text('Ya'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                // Navigasi ke halaman pilihan tanggal dan jam jika pengguna ingin pilih tanggal dan jam konsultasi
+                _selectDate(context);
+              },
+              child: Text('Pilih Tanggal dan Jam'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<DateTime?> _selectDate(BuildContext context) async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime.now(),
+      lastDate: DateTime.now().add(Duration(days: 365)),
+    );
+    if (pickedDate != null) {
+      // Navigasi ke halaman pilihan jam setelah memilih tanggal
+      _selectTime(context, pickedDate);
+    }
+    return pickedDate;
+  }
+
+  Future<void> _selectTime(BuildContext context, DateTime selectedDate) async {
+    final TimeOfDay? pickedTime = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+    );
+    if (pickedTime != null) {
+      // Lakukan tindakan yang sesuai dengan tanggal dan waktu yang dipilih
+      // Contoh: Simpan tanggal dan waktu yang dipilih ke dalam variabel atau kirim ke server
+      // Di sini, Anda dapat menavigasi ke RoomChatPage dengan tanggal dan waktu yang dipilih
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => RoomChatPage()),
+      );
+    }
+  }
 }
-
-// class TanamanPanganPage extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text(
-//           'Tanaman Pangan',
-//           style: TextStyle(color: Color(0xFF447D5C)),
-//         ),
-//       ),
-//       body: Center(
-//         child: Text(
-//           'Halaman Tanaman Pangan',
-//           style: TextStyle(color: Color(0xFF447D5C)),
-//         ),
-//       ),
-//     );
-//   }
-// }
-
-// class HoltikulturaPage extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text(
-//           'Holtikultura',
-//           style: TextStyle(color: Color(0xFF447D5C)),
-//         ),
-//       ),
-//       body: Center(
-//         child: Text(
-//           'Halaman Holtikultura',
-//           style: TextStyle(color: Color(0xFF447D5C)),
-//         ),
-//       ),
-//     );
-//   }
-// }
-
-// class HamaPage extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text(
-//           'Hama',
-//           style: TextStyle(color: Color(0xFF447D5C)),
-//         ),
-//       ),
-//       body: Center(
-//         child: Text(
-//           'Halaman Hama',
-//           style: TextStyle(color: Color(0xFF447D5C)),
-//         ),
-//       ),
-//     );
-//   }
-// }
-
-// class PupukPage extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text(
-//           'Pupuk',
-//           style: TextStyle(color: Color(0xFF447D5C)),
-//         ),
-//       ),
-//       body: Center(
-//         child: Text(
-//           'Halaman Pupuk',
-//           style: TextStyle(color: Color(0xFF447D5C)),
-//         ),
-//       ),
-//     );
-//   }
-// }
-
-// class MediaPage extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text(
-//           'Media',
-//           style: TextStyle(color: Color(0xFF447D5C)),
-//         ),
-//       ),
-//       body: Center(
-//         child: Text(
-//           'Halaman Media',
-//           style: TextStyle(color: Color(0xFF447D5C)),
-//         ),
-//       ),
-//     );
-//   }
-// }
-
-// class AgroklimatologiPage extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text(
-//           'Agroklimatologi',
-//           style: TextStyle(color: Color(0xFF447D5C)),
-//         ),
-//       ),
-//       body: Center(
-//         child: Text(
-//           'Halaman Agroklimatologi',
-//           style: TextStyle(color: Color(0xFF447D5C)),
-//         ),
-//       ),
-//     );
-//   }
-// }
 
 void main() {
   runApp(

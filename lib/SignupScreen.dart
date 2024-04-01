@@ -1,9 +1,48 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:halotani/LoginScreen.dart';
 import 'package:halotani/ProfilePage.dart';
 
 class SignupScreen extends StatelessWidget {
   const SignupScreen({Key? key});
+
+  // Future<void> _registerUser(BuildContext context) async {
+  //   var url = Uri.parse('https://jsonplaceholder.typicode.com/albumsignup/1'); // Ganti dengan URL endpoint untuk pendaftaran
+
+  //   // Data yang akan dikirim sebagai body request (dalam bentuk JSON)
+  //   var data = {
+  //     'username': 'username',
+  //     'email': 'email@example.com',
+  //     'password': 'password',
+  //     // tambahkan data lainnya sesuai kebutuhan, seperti nama, tanggal lahir, dsb.
+  //   };
+
+  //   // Kirim POST request
+  //   var response = await http.post(
+  //     url,
+  //     headers: <String, String>{
+  //       'Content-Type': 'application/json; charset=UTF-8',
+  //     },
+  //     body: jsonEncode(data),
+  //   );
+
+  //   // Respon dari server
+  //   if (response.statusCode == 200) {
+  //     // Jika pendaftaran berhasil, arahkan pengguna ke halaman profil
+  //     Navigator.push(
+  //       context,
+  //       MaterialPageRoute(builder: (context) => ProfilePage()),
+  //     );
+  //   } else {
+  //     // Jika pendaftaran gagal, tampilkan pesan kesalahan
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       SnackBar(
+  //         content: Text('Pendaftaran gagal!'),
+  //       ),
+  //     );
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -21,15 +60,9 @@ class SignupScreen extends StatelessWidget {
               children: <Widget>[
                 Column(
                   children: <Widget>[
-                    const SizedBox(height: 60.0),
-                    const Text(
-                      "Buat Akun",
-                      style: TextStyle(
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(
+                    SizedBox(height: 60.0),
+                    Image.asset('assets/img/HaloTani.png', width: 200, height: 200,),
+                    SizedBox(
                       height: 20,
                     ),
                     Text(
@@ -47,12 +80,12 @@ class SignupScreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(18),
                           borderSide: BorderSide.none,
                         ),
-                        fillColor: const Color(0xFFaadfc0).withOpacity(0.1),
+                        fillColor: Color(0xFFaadfc0).withOpacity(0.1),
                         filled: true,
-                        prefixIcon: const Icon(Icons.person),
+                        prefixIcon: Icon(Icons.person),
                       ),
                     ),
-                    const SizedBox(height: 20),
+                    SizedBox(height: 20),
                     TextField(
                       decoration: InputDecoration(
                         hintText: "Email",
@@ -60,12 +93,12 @@ class SignupScreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(18),
                           borderSide: BorderSide.none,
                         ),
-                        fillColor: const Color(0xFFaadfc0).withOpacity(0.1),
+                        fillColor: Color(0xFFaadfc0).withOpacity(0.1),
                         filled: true,
-                        prefixIcon: const Icon(Icons.email),
+                        prefixIcon: Icon(Icons.email),
                       ),
                     ),
-                    const SizedBox(height: 20),
+                    SizedBox(height: 20),
                     TextField(
                       decoration: InputDecoration(
                         hintText: "Password",
@@ -73,13 +106,13 @@ class SignupScreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(18),
                           borderSide: BorderSide.none,
                         ),
-                        fillColor: const Color(0xFFaadfc0).withOpacity(0.1),
+                        fillColor: Color(0xFFaadfc0).withOpacity(0.1),
                         filled: true,
-                        prefixIcon: const Icon(Icons.password),
+                        prefixIcon: Icon(Icons.password),
                       ),
                       obscureText: true,
                     ),
-                    const SizedBox(height: 20),
+                    SizedBox(height: 20),
                     TextField(
                       decoration: InputDecoration(
                         hintText: "Konfirmasi Password",
@@ -87,9 +120,9 @@ class SignupScreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(18),
                           borderSide: BorderSide.none,
                         ),
-                        fillColor: const Color(0xFFaadfc0).withOpacity(0.1),
+                        fillColor: Color(0xFFaadfc0).withOpacity(0.1),
                         filled: true,
-                        prefixIcon: const Icon(Icons.password),
+                        prefixIcon: Icon(Icons.password),
                       ),
                       obscureText: true,
                     ),
@@ -99,36 +132,36 @@ class SignupScreen extends StatelessWidget {
                   padding: const EdgeInsets.only(top: 3, left: 3),
                   child: ElevatedButton(
                     onPressed: () {
-                       Navigator.push(
+                        Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context) => ProfilePage()),
                         );
-                    },
-                    child: const Text(
+                      },
+                    child: Text(
                       "Daftar",
-                      style: TextStyle(fontSize: 20),
+                      style: TextStyle(fontSize: 20, color: Color(0xFF447D5C)),
                     ),
                     style: ElevatedButton.styleFrom(
-                      shape: const StadiumBorder(),
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      backgroundColor: const Color(0xFFaadfc0),
+                      shape: StadiumBorder(),
+                      padding: EdgeInsets.symmetric(vertical: 16),
+                      backgroundColor: Color(0xFFaadfc0),
                     ),
                   ),
                 ),
-                const Center(child: Text("Atau")),
+                Center(child: Text("Atau")),
                 Container(
                   height: 45,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(25),
                     border: Border.all(
-                      color: const Color(0xFFaadfc0),
+                      color: Color(0xFFaadfc0),
                     ),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.white.withOpacity(0.5),
                         spreadRadius: 1,
                         blurRadius: 1,
-                        offset: const Offset(0, 1), // changes position of shadow
+                        offset: Offset(0, 1), // changes position of shadow
                       ),
                     ],
                   ),
@@ -140,20 +173,20 @@ class SignupScreen extends StatelessWidget {
                         Container(
                           height: 30.0,
                           width: 30.0,
-                          decoration: const BoxDecoration(
+                          decoration: BoxDecoration(
                             image: DecorationImage(
-                              image: AssetImage('assets/images/login_signup/google.png'),
+                              image: AssetImage('assets/img/loginsignup.png'),
                               fit: BoxFit.cover,
                             ),
                             shape: BoxShape.circle,
                           ),
                         ),
-                        const SizedBox(width: 18),
-                        const Text(
+                        SizedBox(width: 18),
+                        Text(
                           "Daftar dengan Google",
                           style: TextStyle(
                             fontSize: 16,
-                            color: Color(0xFFaadfc0),
+                            color: Color(0xFF447D5C),
                           ),
                         ),
                       ],
@@ -163,7 +196,7 @@ class SignupScreen extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    const Text("Sudah punya akun?"),
+                    Text("Sudah punya akun?"),
                     TextButton(
                       onPressed: () {
                         Navigator.push(
@@ -171,9 +204,9 @@ class SignupScreen extends StatelessWidget {
                           MaterialPageRoute(builder: (context) => LoginScreen()),
                         );
                       },
-                      child: const Text(
+                      child: Text(
                         "Masuk",
-                        style: TextStyle(color: Color(0xFFaadfc0)),
+                        style: TextStyle(color: Color(0xFF447D5C)),
                       ),
                     ),
                   ],

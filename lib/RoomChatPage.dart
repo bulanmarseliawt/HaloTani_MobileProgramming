@@ -1,34 +1,103 @@
 import 'package:flutter/material.dart';
 
+class Message {
+  final String messageContent;
+  final String messageType; // "receiver" or "sender"
+
+  Message({
+    required this.messageContent,
+    required this.messageType,
+  });
+}
+
 class RoomChatPage extends StatelessWidget {
+  final List<Message> messages = [
+    Message(
+      messageContent: 'Halo, bagaimana kabarmu?',
+      messageType: 'receiver',
+    ),
+    Message(
+      messageContent: 'Halo! Saya baik-baik saja, terima kasih.',
+      messageType: 'sender',
+    ),
+    Message(
+      messageContent: 'Apakah kamu sudah mengerjakan tugas itu?',
+      messageType: 'receiver',
+    ),
+    Message(
+      messageContent: 'Belum, tapi saya akan segera melakukannya.',
+      messageType: 'sender',
+    ),
+    // Tambahkan pesan lain sesuai kebutuhan
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Pakar Tanaman Pangan'),
-      ),
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Expanded(
-            child: ListView(
+          Container(
+            color: Color.fromRGBO(170, 223, 192, 1), // Ganti warna sesuai kebutuhan
+            padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
+            child: Column(
               children: [
-                ChatBubble(
-                  messageContent: 'Halo, saya mau konsultasi?',
-                  messageType: MessageType.sender,
-                  userProfileName: 'Coba',
+                AppBar(
+                  title: Text('Pakar Halotani'),
+                  backgroundColor: Colors.transparent,
+                  elevation: 0,
                 ),
-                ChatBubble(
-                  messageContent: 'Boleh, silahkan ceritakan keluhan tanaman Anda',
-                  messageType: MessageType.receiver,
-                  userProfileName: 'Pakar Tanaman Pangan'
+                SizedBox(height: 16),
+                CircleAvatar(
+                  radius: 50,
+                  backgroundImage: AssetImage('assets/img/pakar2.png'), // Ganti dengan foto pakar
                 ),
-                ChatBubble(
-                  messageContent: 'Ada yang bisa saya bantu?',
-                  messageType: MessageType.receiver,
-                  userProfileName: 'Pakar Tanaman Pangan'
+                SizedBox(height: 8),
+                Text(
+                  'Prof. Dr. Ir. Budioni, M.Sc.', // Ganti dengan nama pakar
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-                // Tambahkan bubble chat lainnya di sini
               ],
+            ),
+          ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: messages.length,
+              shrinkWrap: true,
+              padding: EdgeInsets.only(top: 10, bottom: 10),
+              physics: BouncingScrollPhysics(),
+              itemBuilder: (context, index) {
+                final message = messages[index];
+                return Container(
+                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  child: Align(
+                    alignment: (message.messageType == 'receiver'
+                        ? Alignment.topLeft
+                        : Alignment.topRight),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: (message.messageType == 'receiver'
+                            ? Colors.grey.shade200
+                            : Color.fromRGBO(170, 223, 192, 1)),
+                      ),
+                      padding: EdgeInsets.all(16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            message.messageContent,
+                            style: TextStyle(fontSize: 15),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              },
             ),
           ),
           ChatInputField(),
@@ -36,73 +105,6 @@ class RoomChatPage extends StatelessWidget {
       ),
     );
   }
-}
-
-class ChatBubble extends StatelessWidget {
-  final String messageContent;
-  final MessageType messageType;
-  final String? userProfileImage;
-  final String? userProfileName;
-
-  const ChatBubble({
-    Key? key,
-    required this.messageContent,
-    required this.messageType,
-    this.userProfileImage,
-    this.userProfileName,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Row(
-        mainAxisAlignment: messageType == MessageType.sender
-            ? MainAxisAlignment.end
-            : MainAxisAlignment.start,
-        children: [
-          if (messageType == MessageType.receiver && userProfileImage != null)
-            CircleAvatar(
-              radius: 20,
-              backgroundImage: AssetImage(userProfileImage!),
-            ),
-          Expanded(
-            child: Container(
-              padding: const EdgeInsets.all(12.0),
-              decoration: BoxDecoration(
-                color: messageType == MessageType.sender
-                    ? Color(0xFFaadfc0) // Warna bubble untuk pengirim
-                    : Color.fromARGB(255, 211, 218, 214), // Warna bubble untuk penerima
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  if (userProfileName != null)
-                    Text(
-                      userProfileName!,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Color.fromARGB(255, 55, 122, 58),
-                      ),
-                    ),
-                  Text(
-                    messageContent,
-                    style: TextStyle(fontSize: 16),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-enum MessageType {
-  sender,
-  receiver,
 }
 
 class ChatInputField extends StatelessWidget {
@@ -118,7 +120,7 @@ class ChatInputField extends StatelessWidget {
           Expanded(
             child: TextField(
               decoration: InputDecoration(
-                hintText: 'Tulis keluhanmu...',
+                hintText: 'Tulis pesan...',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(25.0),
                 ),
