@@ -104,7 +104,7 @@ class MediaHomePage extends StatelessWidget {
       ),
     );
   }
-
+// Widget untuk membuat bagian sesi dengan warna latar belakang khusus
   Widget _buildSessionWithColor({
     required String title,
     required AssetImage image,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+// Untuk mewakili pesan
 class Message {
   final String messageContent;
   final String messageType; // "receiver" or "sender"
@@ -10,6 +11,7 @@ class Message {
   });
 }
 
+// Widget untuk halaman obrolan ruang
 class RoomChatPage extends StatelessWidget {
   final List<Message> messages = [
     Message(
@@ -107,6 +109,7 @@ class RoomChatPage extends StatelessWidget {
   }
 }
 
+// untuk input chat
 class ChatInputField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

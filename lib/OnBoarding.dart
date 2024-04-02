@@ -1,7 +1,9 @@
+// Import paket yang diperlukan
 import 'package:concentric_transition/concentric_transition.dart';
 import 'package:flutter/material.dart';
 import 'package:halotani/splashscreen.dart';
 
+// Daftar halaman onboarding
 final pages = [
   PageData(
     image: AssetImage('assets/img/suncloud.png'),
@@ -23,6 +25,7 @@ final pages = [
   ),
 ];
 
+// Widget untuk tampilan onboarding
 class Onboarding extends StatelessWidget {
   const Onboarding({Key? key}) : super(key: key);
 
@@ -51,6 +54,7 @@ class Onboarding extends StatelessWidget {
   }
 }
 
+// Model data untuk halaman onboarding
 class PageData {
   final String? title;
   final ImageProvider? image;
@@ -65,6 +69,7 @@ class PageData {
   });
 }
 
+// Widget untuk menampilkan konten setiap halaman onboarding
 class _Page extends StatelessWidget {
   final PageData page;
   final bool isLastPage;
@@ -78,6 +83,7 @@ class _Page extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
+        // Menampilkan gambar halaman
         Container(
           padding: const EdgeInsets.all(16.0),
           margin: const EdgeInsets.all(16.0),
@@ -90,6 +96,7 @@ class _Page extends StatelessWidget {
             // color: page.bgColor,
           ),
         ),
+        // Menampilkan judul halaman
         Text(
           page.title ?? "",
           style: TextStyle(
@@ -98,6 +105,7 @@ class _Page extends StatelessWidget {
               fontWeight: FontWeight.bold),
           textAlign: TextAlign.center,
         ),
+        //  Menampilkan tombol 'Mulai' jika halaman terakhir
         if (isLastPage) ...[
           SizedBox(height: screenHeight * 0.05),
           ElevatedButton(

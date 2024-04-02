@@ -28,6 +28,7 @@ class LoginScreen extends StatelessWidget {
     );
   }
 
+// Widget untuk tampilan header
   Widget _header() {
     return Column(
       children: [
@@ -37,6 +38,7 @@ class LoginScreen extends StatelessWidget {
     );
   }
 
+// Widget untuk tampilan field input dan tombol masuk
   Widget _inputField(context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -115,6 +117,8 @@ class LoginScreen extends StatelessWidget {
   //   }
   // }
 
+
+// Widget untuk tampilan lupa kata sandi
   Widget _forgotPassword(context) {
     return TextButton(
       onPressed: () {},

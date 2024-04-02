@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:line_awesome_flutter/line_awesome_flutter.dart';
-import 'package:get/get.dart';
+import 'package:line_awesome_flutter/line_awesome_flutter.dart'; // Import ikon dari Line Awesome
+import 'package:get/get.dart'; // Import GetX untuk manajemen state
 
+// Konstanta yang digunakan dalam aplikasi
 const tProfile = 'Edit Profile';
 const tProfileImage = 'assets/img/profile.jpg';
 const tPrimaryColor = Color.fromRGBO(170, 223, 192, 1);
@@ -16,25 +17,27 @@ const tJoined = 'Joined ';
 const tJoinedAt = 'March 2024';
 const tDelete = 'Delete';
 
+// Controller untuk manajemen profil (gunakan GetX)
 class ProfileController extends GetxController {}
 
+// Widget untuk layar pembaruan profil
 class UpdateProfileScreen extends StatelessWidget {
   const UpdateProfileScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(ProfileController());
+    final controller = Get.put(ProfileController()); // Menggunakan controller untuk manajemen state
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(onPressed: () => Get.back(), icon: const Icon(LineAwesomeIcons.angle_left)),
-        title: Text(tProfile, style: Theme.of(context).textTheme.headline4),
+        leading: IconButton(onPressed: () => Get.back(), icon: const Icon(LineAwesomeIcons.angle_left)), // Tombol kembali
+        title: Text(tProfile, style: Theme.of(context).textTheme.headline4), // Judul aplikasi
       ),
       body: SingleChildScrollView(
         child: Container(
           padding: const EdgeInsets.all(tDefaultSize),
           child: Column(
             children: [
-              // -- IMAGE with ICON
+              // -- GAMBAR dengan ICON
               Stack(
                 children: [
                   SizedBox(
@@ -42,7 +45,7 @@ class UpdateProfileScreen extends StatelessWidget {
                     height: 120,
                     child: ClipRRect(
                         borderRadius: BorderRadius.circular(100),
-                        child: const Image(image: AssetImage(tProfileImage))),
+                        child: const Image(image: AssetImage(tProfileImage))), // Gambar profil
                   ),
                   Positioned(
                     bottom: 0,
@@ -52,32 +55,36 @@ class UpdateProfileScreen extends StatelessWidget {
                       height: 35,
                       decoration:
                       BoxDecoration(borderRadius: BorderRadius.circular(100), color: tPrimaryColor),
-                      child: const Icon(LineAwesomeIcons.camera, color: Colors.black, size: 20),
+                      child: const Icon(LineAwesomeIcons.camera, color: Colors.black, size: 20), // Tombol kamera untuk mengubah profil
                     ),
                   ),
                 ],
               ),
               const SizedBox(height: 50),
 
-              // -- Form Fields
+              // -- Kolom Isian Form
               Form(
                 child: Column(
                   children: [
+                    // Kolom isian nama lengkap
                     TextFormField(
                       decoration: const InputDecoration(
                           label: Text(tFullName), prefixIcon: Icon(LineAwesomeIcons.user)),
                     ),
                     const SizedBox(height: tFormHeight - 20),
+                    // Kolom isian email
                     TextFormField(
                       decoration: const InputDecoration(
                           label: Text(tEmail), prefixIcon: Icon(LineAwesomeIcons.envelope_1)),
                     ),
                     const SizedBox(height: tFormHeight - 20),
+                    // Kolom isian nomor telepon
                     TextFormField(
                       decoration: const InputDecoration(
                           label: Text(tPhoneNo), prefixIcon: Icon(LineAwesomeIcons.phone)),
                     ),
                     const SizedBox(height: tFormHeight - 20),
+                    // Kolom isian password
                     TextFormField(
                       obscureText: true,
                       decoration: InputDecoration(
@@ -89,21 +96,21 @@ class UpdateProfileScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: tFormHeight),
 
-                    // -- Form Submit Button
+                    // -- Tombol untuk Mengirimkan Form
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
-                        onPressed: () => Get.to(() => const UpdateProfileScreen()),
+                        onPressed: () => Get.to(() => const UpdateProfileScreen()), // Navigasi ke layar pembaruan profil
                         style: ElevatedButton.styleFrom(
                             backgroundColor: tPrimaryColor,
                             side: BorderSide.none,
                             shape: const StadiumBorder()),
-                        child: const Text(tEditProfile, style: TextStyle(color: Colors.white)),
+                        child: const Text(tEditProfile, style: TextStyle(color: Colors.white)), // Teks tombol untuk mengedit profil
                       ),
                     ),
                     const SizedBox(height: tFormHeight),
 
-                    // -- Created Date and Delete Button
+                    // -- Tanggal Pembuatan Profil dan Tombol Hapus
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -114,7 +121,7 @@ class UpdateProfileScreen extends StatelessWidget {
                             children: [
                               TextSpan(
                                   text: tJoinedAt,
-                                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12))
+                                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12)) // Tanggal bergabung dengan aplikasi
                             ],
                           ),
                         ),
@@ -126,7 +133,7 @@ class UpdateProfileScreen extends StatelessWidget {
                               foregroundColor: const Color.fromARGB(255, 4, 82, 44),
                               shape: const StadiumBorder(),
                               side: BorderSide.none),
-                          child: const Text(tDelete),
+                          child: const Text(tDelete), // Teks tombol untuk menghapus profil
                         ),
                       ],
                     )
