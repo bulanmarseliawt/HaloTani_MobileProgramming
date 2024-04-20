@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "637016744812",
+    "firebase_url": "https://halotani-2bf84-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "halotani-2bf84",
+    "storage_bucket": "halotani-2bf84.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:637016744812:android:df7b14995b09dadfca8949",
+        "android_client_info": {
+          "package_name": "com.example.halotani"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCAomzvLY0dhZbgQncpKpKqbZ5O6v-tyIQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -5,44 +5,62 @@ import 'package:halotani/LoginScreen.dart';
 import 'package:halotani/ProfilePage.dart';
 
 class SignupScreen extends StatelessWidget {
-  const SignupScreen({Key? key});
+  SignupScreen({Key? key}) : super(key: key);
 
-  // Future<void> _registerUser(BuildContext context) async {
-  //   var url = Uri.parse('https://jsonplaceholder.typicode.com/albumsignup/1'); // Ganti dengan URL endpoint untuk pendaftaran
+  final TextEditingController _usernameController = TextEditingController(); 
+  final TextEditingController _emailController = TextEditingController(); 
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController = TextEditingController();
 
-  //   // Data yang akan dikirim sebagai body request (dalam bentuk JSON)
-  //   var data = {
-  //     'username': 'username',
-  //     'email': 'email@example.com',
-  //     'password': 'password',
-  //     // tambahkan data lainnya sesuai kebutuhan, seperti nama, tanggal lahir, dsb.
-  //   };
+  bool _isPasswordValid(String password) {
+    RegExp regex = RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#$%^&*()_+{}|<>?]).{8,}$');
+    return regex.hasMatch(password);
+  }
 
-  //   // Kirim POST request
-  //   var response = await http.post(
-  //     url,
-  //     headers: <String, String>{
-  //       'Content-Type': 'application/json; charset=UTF-8',
-  //     },
-  //     body: jsonEncode(data),
-  //   );
+  Future<void> _registerUser(BuildContext context) async {
+    var url = Uri.parse('https://halotani-2bf84-default-rtdb.asia-southeast1.firebasedatabase.app/user.json');
 
-  //   // Respon dari server
-  //   if (response.statusCode == 200) {
-  //     // Jika pendaftaran berhasil, arahkan pengguna ke halaman profil
-  //     Navigator.push(
-  //       context,
-  //       MaterialPageRoute(builder: (context) => ProfilePage()),
-  //     );
-  //   } else {
-  //     // Jika pendaftaran gagal, tampilkan pesan kesalahan
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //       SnackBar(
-  //         content: Text('Pendaftaran gagal!'),
-  //       ),
-  //     );
-  //   }
-  // }
+    if (!_isPasswordValid(_passwordController.text)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Password harus memiliki minimal 8 karakter, mengandung huruf besar, huruf kecil, dan simbol.'),
+        ),
+      );
+      return;
+    }
+
+    var data = {
+      'username': _usernameController.text, 
+      'email': _emailController.text, 
+      'password': _passwordController.text,
+    };
+
+    var response = await http.post(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(data),
+    );
+
+    if (response.statusCode == 200) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => ProfilePage()),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Pendaftaran berhasil!'),
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Pendaftaran gagal!'),
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,6 +92,7 @@ class SignupScreen extends StatelessWidget {
                 Column(
                   children: <Widget>[
                     TextField(
+                      controller: _usernameController, // Tambahkan controller untuk input username
                       decoration: InputDecoration(
                         hintText: "Username",
                         border: OutlineInputBorder(
@@ -87,6 +106,7 @@ class SignupScreen extends StatelessWidget {
                     ),
                     SizedBox(height: 20),
                     TextField(
+                      controller: _emailController, // Tambahkan controller untuk input email
                       decoration: InputDecoration(
                         hintText: "Email",
                         border: OutlineInputBorder(
@@ -100,20 +120,22 @@ class SignupScreen extends StatelessWidget {
                     ),
                     SizedBox(height: 20),
                     TextField(
+                      controller: _passwordController,
                       decoration: InputDecoration(
-                        hintText: "Password",
+                        hintText: "Password (minimal 8 karakter, huruf besar, kecil, simbol)",
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(18),
                           borderSide: BorderSide.none,
                         ),
                         fillColor: Color(0xFFaadfc0).withOpacity(0.1),
                         filled: true,
-                        prefixIcon: Icon(Icons.password),
+                        prefixIcon: Icon(Icons.lock),
                       ),
                       obscureText: true,
                     ),
                     SizedBox(height: 20),
                     TextField(
+                      controller: _confirmPasswordController,
                       decoration: InputDecoration(
                         hintText: "Konfirmasi Password",
                         border: OutlineInputBorder(
@@ -122,7 +144,7 @@ class SignupScreen extends StatelessWidget {
                         ),
                         fillColor: Color(0xFFaadfc0).withOpacity(0.1),
                         filled: true,
-                        prefixIcon: Icon(Icons.password),
+                        prefixIcon: Icon(Icons.lock),
                       ),
                       obscureText: true,
                     ),
@@ -131,12 +153,17 @@ class SignupScreen extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.only(top: 3, left: 3),
                   child: ElevatedButton(
-                    onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => ProfilePage()),
+                    onPressed: () async {
+                      if (_passwordController.text != _confirmPasswordController.text) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Password dan konfirmasi password tidak cocok.'),
+                          ),
                         );
-                      },
+                      } else {
+                        await _registerUser(context);
+                      }
+                    },
                     child: Text(
                       "Daftar",
                       style: TextStyle(fontSize: 20, color: Color(0xFF447D5C)),

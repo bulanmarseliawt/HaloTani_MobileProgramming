@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:halotani/ProfilePage.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart'; // Import ikon dari Line Awesome
 import 'package:get/get.dart'; // Import GetX untuk manajemen state
 
@@ -29,7 +30,7 @@ class UpdateProfileScreen extends StatelessWidget {
     final controller = Get.put(ProfileController()); // Menggunakan controller untuk manajemen state
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(onPressed: () => Get.back(), icon: const Icon(LineAwesomeIcons.angle_left)), // Tombol kembali
+        leading: IconButton(onPressed: () => ProfilePage(), icon: const Icon(LineAwesomeIcons.angle_left)), // Tombol kembali
         title: Text(tProfile, style: Theme.of(context).textTheme.headline4), // Judul aplikasi
       ),
       body: SingleChildScrollView(

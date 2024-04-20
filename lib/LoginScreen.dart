@@ -91,31 +91,31 @@ class LoginScreen extends StatelessWidget {
     );
   }
 
-  // void _login(BuildContext context) async {
-  //   // Ganti URL dengan endpoint login Anda
-  //   final url = Uri.parse('https://jsonplaceholder.typicode.com/albumlogin/1');
-  //   final response = await http.post(
-  //     url,
-  //     body: json.encode({
-  //       'username': 'test',
-  //       'password': 'test',
-  //     }),
-  //     headers: {'Content-Type': 'application/json'},
-  //   );
+  void _login(BuildContext context) async {
+    // Ganti URL dengan endpoint login Anda
+    final url = Uri.parse('https://halotani-2bf84-default-rtdb.asia-southeast1.firebasedatabase.app/user.json');
+    final response = await http.post(
+      url,
+      body: json.encode({
+        'username': 'test',
+        'password': 'test',
+      }),
+      headers: {'Content-Type': 'application/json'},
+    );
 
-  //   if (response.statusCode == 200) {
-  //     // Jika login berhasil, navigasikan ke halaman profil
-  //     Navigator.push(
-  //       context,
-  //       MaterialPageRoute(builder: (context) => ProfilePage()),
-  //     );
-  //   } else {
-  //     // Jika login gagal, tampilkan pesan kesalahan
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //       SnackBar(content: Text('Login gagal')),
-  //     );
-  //   }
-  // }
+    if (response.statusCode == 200) {
+      // Jika login berhasil, navigasikan ke halaman profil
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => ProfilePage()),
+      );
+    } else {
+      // Jika login gagal, tampilkan pesan kesalahan
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Login gagal')),
+      );
+    }
+  }
 
 
 // Widget untuk tampilan lupa kata sandi
