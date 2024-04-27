@@ -3,22 +3,31 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:halotani/LoginScreen.dart';
 import 'package:halotani/ProfilePage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class SignupScreen extends StatelessWidget {
   SignupScreen({Key? key}) : super(key: key);
 
+
+  // Controler untuk inputan
   final TextEditingController _usernameController = TextEditingController(); 
   final TextEditingController _emailController = TextEditingController(); 
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController = TextEditingController();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance; 
 
+
+  // Untuk cek password
   bool _isPasswordValid(String password) {
     RegExp regex = RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#$%^&*()_+{}|<>?]).{8,}$');
     return regex.hasMatch(password);
   }
 
+  // untuk mendaftarkan users
   Future<void> _registerUser(BuildContext context) async {
-    var url = Uri.parse('https://halotani-2bf84-default-rtdb.asia-southeast1.firebasedatabase.app/user.json');
+    var url = Uri.parse('https://halotani-2bf84-default-rtdb.asia-southeast1.firebasedatabase.app/users.json');
 
     if (!_isPasswordValid(_passwordController.text)) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -35,6 +44,7 @@ class SignupScreen extends StatelessWidget {
       'password': _passwordController.text,
     };
 
+  // untuk mengirim data ke firebase
     var response = await http.post(
       url,
       headers: <String, String>{

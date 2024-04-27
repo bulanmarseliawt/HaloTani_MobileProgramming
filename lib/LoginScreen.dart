@@ -3,9 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:halotani/ProfilePage.dart';
 import 'package:halotani/SignupScreen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginScreen extends StatelessWidget {
-  const LoginScreen({Key? key});
+  LoginScreen({Key? key});
+
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  
 
   @override
   Widget build(BuildContext context) {
@@ -44,6 +51,7 @@ class LoginScreen extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         TextField(
+          controller: _usernameController,
           decoration: InputDecoration(
             hintText: "Username",
             border: OutlineInputBorder(
@@ -57,6 +65,7 @@ class LoginScreen extends StatelessWidget {
         ),
         const SizedBox(height: 10),
         TextField(
+          controller: _passwordController,
           decoration: InputDecoration(
             hintText: "Password",
             border: OutlineInputBorder(
@@ -72,11 +81,8 @@ class LoginScreen extends StatelessWidget {
         const SizedBox(height: 10),
         ElevatedButton(
           onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => ProfilePage()),
-              );
-           },
+            _login(context);
+          },
           style: ElevatedButton.styleFrom(
             shape: const StadiumBorder(),
             padding: const EdgeInsets.symmetric(vertical: 16),
@@ -92,33 +98,50 @@ class LoginScreen extends StatelessWidget {
   }
 
   void _login(BuildContext context) async {
-    // Ganti URL dengan endpoint login Anda
-    final url = Uri.parse('https://halotani-2bf84-default-rtdb.asia-southeast1.firebasedatabase.app/user.json');
-    final response = await http.post(
-      url,
-      body: json.encode({
-        'username': 'test',
-        'password': 'test',
-      }),
-      headers: {'Content-Type': 'application/json'},
-    );
+  final url = Uri.parse('https://halotani-2bf84-default-rtdb.asia-southeast1.firebasedatabase.app/users.json');
+  final response = await http.get(url);
 
-    if (response.statusCode == 200) {
-      // Jika login berhasil, navigasikan ke halaman profil
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => ProfilePage()),
-      );
+  if (response.statusCode == 200) {
+    final jsonData = json.decode(response.body);
+
+    // Periksa apakah ada data pengguna
+    if (jsonData != null) {
+      final username = _usernameController.text;
+      final password = _passwordController.text;
+
+      // Iterasi melalui data pengguna untuk mencari kecocokan
+      bool isUserFound = false;
+      jsonData.forEach((key, value) {
+        if (value['username'] == username && value['password'] == password) {
+          isUserFound = true;
+          return;
+        }
+      });
+
+      // Jika pengguna ditemukan, arahkan ke halaman profil
+      if (isUserFound) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => ProfilePage()),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Username atau password salah')),
+        );
+      }
     } else {
-      // Jika login gagal, tampilkan pesan kesalahan
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Login gagal')),
+        SnackBar(content: Text('Tidak ada pengguna terdaftar')),
       );
     }
+  } else {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Login gagal')),
+    );
   }
+}
 
 
-// Widget untuk tampilan lupa kata sandi
   Widget _forgotPassword(context) {
     return TextButton(
       onPressed: () {},
